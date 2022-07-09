@@ -18,9 +18,9 @@ import { nanoid } from "nanoid";
 
 export default function App() {
     // state para todas as notas
-    const [notes, setNotes] = React.useState(
-        JSON.parse(localStorage.getItem("notes")) || []
-    );
+    const [notes, setNotes] = React.useState(() => {
+        return JSON.parse(localStorage.getItem("notes")) || [];
+    });
     // state para mudar tela das notas
     const [currentNoteId, setCurrentNoteId] = React.useState(
         (notes[0] && notes[0].id) || ""
