@@ -138,3 +138,21 @@ button:focus {
     align-items: center;
     background-color: whitesmoke;
 }
+
+.title:hover > .trash-icon{
+    display: flex;
+}
+
+.trash-icon {
+   display: none;
+}
+
+.trash-icon-active {
+    margin-right: 5px;
+    color: white;
+}
+
+.trash-icon-not-active {
+    margin-right: 5px;
+    color: #4a4e74;
+}

@@ -6,14 +6,8 @@ import Split from "react-split";
 import { nanoid } from "nanoid";
 
 /**
- * Challenge:
- * 1. Every time the `notes` array changes, save it
- *    in localStorage. You'll need to use JSON.stringify()
- *    to turn the array into a string to save in localStorage.
- * 2. When the app first loads, initialize the notes state
- *    with the notes saved in localStorage. You'll need to
- *    use JSON.parse() to turn the stringified array back
- *    into a real JS array.
+ * Challenge: When the user edits a note, reposition
+ * it in the list of notes to the top of the list
  */
 
 export default function App() {
@@ -28,7 +22,6 @@ export default function App() {
 
     React.useEffect(() => {
         localStorage.setItem("notes", JSON.stringify(notes));
-        console.log(notes);
     });
 
     // função para criar novas notas
@@ -43,15 +36,35 @@ export default function App() {
         setCurrentNoteId(newNote.id);
     }
 
+    function deleteNote(event, noteId) {
+        event.stopPropagation();
+        setNotes((prevNotes) => {
+            const newNotes = [];
+            prevNotes.forEach((note) => {
+                if (note.id != noteId) {
+                    newNotes.push(note);
+                }
+            });
+            console.log(newNotes);
+            return newNotes;
+        });
+    }
+
     // toda vez que uma nota for editada armazena o novo texto na id especifica
     function updateNote(text) {
-        setNotes((oldNotes) =>
-            oldNotes.map((oldNote) => {
-                return oldNote.id === currentNoteId
-                    ? { ...oldNote, body: text }
-                    : oldNote;
-            })
-        );
+        setNotes((oldNotes) => {
+            const newNotes = [];
+            // passa por todas as notas existentes
+            oldNotes.forEach((note) => {
+                if (note.id === currentNoteId) {
+                    // coloca nota mudada na primeira posição
+                    newNotes.unshift({ ...note, body: text });
+                } else {
+                    newNotes.push(note);
+                }
+            });
+            return newNotes;
+        });
     }
 
     // utilizada para trocar entres as notas existentes
@@ -76,6 +89,7 @@ export default function App() {
                         currentNote={findCurrentNote()}
                         setCurrentNoteId={setCurrentNoteId}
                         newNote={createNewNote}
+                        deleteNote={deleteNote}
                     />
                     {currentNoteId && notes.length > 0 && (
                         <Editor
