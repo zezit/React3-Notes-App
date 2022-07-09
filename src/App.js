@@ -14,20 +14,26 @@ import {nanoid} from "nanoid"
  */
 
 export default function App() {
+    // state para todas as notas
     const [notes, setNotes] = React.useState([])
+    // state para mudar tela das notas
     const [currentNoteId, setCurrentNoteId] = React.useState(
         (notes[0] && notes[0].id) || ""
     )
     
+    // função para criar novas notas
     function createNewNote() {
         const newNote = {
-            id: nanoid(),
+            id: nanoid(), // coloca uma id única para cada nota
             body: "# Type your markdown note's title here"
         }
+        // salva nas notas já existentes
         setNotes(prevNotes => [newNote, ...prevNotes])
+        // muda a tela para a nova nota
         setCurrentNoteId(newNote.id)
     }
     
+    // toda vez que uma nota for editada armazena o novo texto na id especifica
     function updateNote(text) {
         setNotes(oldNotes => oldNotes.map(oldNote => {
             return oldNote.id === currentNoteId
@@ -36,6 +42,7 @@ export default function App() {
         }))
     }
     
+    // utilizada para trocar entres as notas existentes
     function findCurrentNote() {
         return notes.find(note => {
             return note.id === currentNoteId
